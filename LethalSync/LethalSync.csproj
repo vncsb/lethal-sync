@@ -26,7 +26,9 @@
     <Reference Include="Facepunch.Steamworks.Win64">
       <HintPath>$(LETHAL_COMPANY_DIR)/Lethal Company_Data/Managed/Facepunch.Steamworks.Win64.dll</HintPath>
     </Reference>
-
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(LETHAL_COMPANY_DIR)/Lethal Company_Data/Managed/Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">

@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 
@@ -16,9 +15,8 @@ namespace LethalSync
             // Plugin startup logic
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
 
-            harmony = new Harmony("com.lethalsync");
-            MethodInfo originalLobbyCreated = AccessTools.Method(typeof(GameNetworkManager), nameof(GameNetworkManager.SteamMatchmaking_OnLobbyCreated));
-            harmony.Patch()
+            var harmony = new Harmony("com.lethalsync");
+            harmony.PatchAll();
         }
     }
 }

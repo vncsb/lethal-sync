@@ -1,19 +1,30 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using BepInEx;
 using BepInEx.Bootstrap;
+using HarmonyLib;
 using Steamworks.Data;
+using Newtonsoft.Json;
 
+[HarmonyPatch(typeof(GameNetworkManager))]
+[HarmonyPatch(nameof(GameNetworkManager.SteamMatchmaking_OnLobbyCreated))]
 public class OnLobbyCreatedPatch
 {
     static void Postfix(ref Lobby lobby)
     {
-        var loadedPlugins = Chainloader.PluginInfos;
-        var pluginList = MakeJSONPluginList(loadedPlugins.Values.ToList());
+        try
+        {
+            var loadedPlugins = Chainloader.PluginInfos;
+            var pluginList = MakeJSONPluginList(loadedPlugins.Values.ToList());
 
-        lobby.SetData("plugins", pluginList);
-        LethalSync.Plugin.Log.LogInfo(lobby.GetData("plugins"));
+            lobby.SetData("plugins", pluginList);
+            LethalSync.Plugin.Log.LogInfo(lobby.GetData("plugins"));
+        }
+        catch (System.Exception error)
+        {
+            LethalSync.Plugin.Log.LogError(error);
+            throw;
+        }
     }
 
     private static string MakeJSONPluginList(List<PluginInfo> pluginInfos)
@@ -31,6 +42,6 @@ public class OnLobbyCreatedPatch
             });
         }
 
-        return JsonSerializer.Serialize(plugins);
+        return JsonConvert.SerializeObject(plugins); 
     }
 }
